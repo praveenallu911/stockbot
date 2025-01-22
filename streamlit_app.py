@@ -38,12 +38,12 @@ else:
         with st.chat_message("user"):
             st.markdown(prompt)
 
-        # Fetch current global news using Perigon API.
-        perigon_api_key = "2573b0fa-bded-4dc8-a432-bba655c3e400"
+        # Fetch current global news using NewsAPI.
+        news_api_key = "9e5c6c91e83c406a90f7c3eb84c9d981"
         today = datetime.now().strftime('%Y-%m-%d')
-        last_week = (datetime.now() - timedelta(days=50)).strftime('%Y-%m-%d')
-        perigon_url = f"https://api.goperigon.com/v1/all?apiKey={perigon_api_key}&from={last_week}&to={today}&language=en"
-        news_response = requests.get(perigon_url)
+        last_week = (datetime.now() - timedelta(days=20)).strftime('%Y-%m-%d')
+        news_url = f"https://newsapi.org/v2/everything?q=stock&from={last_week}&to={today}&language=en&apiKey={news_api_key}"
+        news_response = requests.get(news_url)
         news_data = news_response.json()
 
         # Generate a response using the OpenAI API.
@@ -64,10 +64,10 @@ else:
 
         # Score the impact of the news on stock prices.
         score_response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4-turbo",
             messages=[
                 {"role": "system", "content": "You are a stock advisor based on current global news."},
-                {"role": "user", "content": f"Score the impact of the following news on stock prices:\n{news_summary}"}
+                {"role": "user", "content": f"Score the impact of the following news on stock prices and advice the user on investment or release of stocks if he holds any:\n{news_summary}"}
             ],
         )
         score = score_response.choices[0].message.content
