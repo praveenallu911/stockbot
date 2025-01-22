@@ -12,8 +12,7 @@ st.write(
 )
 
 # Ask user for their OpenAI API key via `st.text_input`.
-# openai_api_key = st.text_input("OpenAI API Key", type="password")
-openai_api_key='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'
+openai_api_key = st.text_input("OpenAI API Key", type="password")
 if not openai_api_key:
     st.info("Please add your OpenAI API key to continue.", icon="🗝️")
 else:
@@ -71,7 +70,7 @@ else:
                 {"role": "user", "content": f"Score the impact of the following news on stock prices:\n{news_summary}"}
             ],
         )
-        score = score_response.choices[0].message["content"]
+        score = score_response.choices[0].message.content
         st.session_state.messages.append({"role": "assistant", "content": f"Impact Score: {score}"})
         with st.chat_message("assistant"):
             st.markdown(f"Impact Score: {score}")
