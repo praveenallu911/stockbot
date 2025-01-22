@@ -41,7 +41,7 @@ else:
         # Fetch current global news using Perigon API.
         perigon_api_key = "2573b0fa-bded-4dc8-a432-bba655c3e400"
         today = datetime.now().strftime('%Y-%m-%d')
-        last_week = (datetime.now() - timedelta(days=7)).strftime('%Y-%m-%d')
+        last_week = (datetime.now() - timedelta(days=50)).strftime('%Y-%m-%d')
         perigon_url = f"https://api.goperigon.com/v1/all?apiKey={perigon_api_key}&from={last_week}&to={today}&language=en"
         news_response = requests.get(perigon_url)
         news_data = news_response.json()
@@ -49,7 +49,7 @@ else:
         # Generate a response using the OpenAI API.
         news_summary = "\n".join([article["title"] for article in news_data["articles"][:5]])
         stream = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4-turbo",
             messages=[
                 {"role": "system", "content": "You are a stock advisor based on current global news."},
                 {"role": "user", "content": f"Analyze the following news and provide stock advice:\n{news_summary}"}
